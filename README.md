@@ -2,6 +2,7 @@
 ## Main Description
 This package contains codes to calculate transport properties using Boltzmann Transport theory. 
 There are three distinct features of the code:
+
 1. Calculation of scattering rates based on electron-phonon(LO only) interactions. A simple analytical formula is used.
 2. Adaptive smearing width choice for the evaluation of energy conserving Dirac delta functions. See documentaion.
 3. Adaptive k-grid around the Fermi level to reduce integration time. See documentation.
