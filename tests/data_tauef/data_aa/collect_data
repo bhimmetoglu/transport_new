@@ -1,0 +1,19 @@
+#!/bin/bash
+
+rm invtau_vs_aa*out
+
+for kp in 8 16 24 32 40 50
+do
+
+for aa in 0.6 0.8 1.0 1.2 1.4 1.6
+do
+
+tau1=`head -1 invtauef.$kp.$aa.out | awk '{print $2}'` 
+tau2=`head -1 invtauef.$kp.$aa.out | awk '{print $3}'` 
+tau3=`head -1 invtauef.$kp.$aa.out | awk '{print $4}'` 
+
+echo $aa $tau1 $tau2 $tau3 >> invtau_vs_aa.$kp.out
+
+done
+
+done

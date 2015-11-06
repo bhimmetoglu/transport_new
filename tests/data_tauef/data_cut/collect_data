@@ -1,0 +1,19 @@
+#!/bin/bash
+
+rm invtau_vs_cut*out
+
+for kp in 8 16 24 32
+do
+
+for cut in 2.0 5.0 8.0 10.0 12.0 15.0
+do
+
+tau1=`head -1 invtauef.$kp.$cut.out | awk '{print $2}'` 
+tau2=`head -1 invtauef.$kp.$cut.out | awk '{print $3}'` 
+tau3=`head -1 invtauef.$kp.$cut.out | awk '{print $4}'` 
+
+echo $cut $tau1 $tau2 $tau3 >> invtau_vs_cut.$kp.out
+
+done
+
+done

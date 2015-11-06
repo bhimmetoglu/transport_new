@@ -1,0 +1,4 @@
+In this test we compute the smearing parameter
+using the forward derivatives, not velocities.
+
+Also aa=1.0, and cut=10.0

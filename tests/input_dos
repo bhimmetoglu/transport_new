@@ -1,0 +1,15 @@
+&input
+  fil_a2F     = 'STO.8.a2Fsave'
+  fil_info    = 'info-q'
+  nk1fit      = 8
+  nk2fit      = 8
+  nk3fit      = 8
+  vbm         = 10.1691     ! in eV 
+  cbm         = 12.0062     ! in eV 
+  T           = 300         ! in K
+  Nen         = 500
+  emin        = 5.0         ! in eV
+  emax        = 15.0        ! in eV
+  cut         = 1.0         ! parameter in sig_nk
+&end
+

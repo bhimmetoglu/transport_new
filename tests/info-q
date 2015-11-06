@@ -1,0 +1,10 @@
+crystal axes: (cart. coord. in units of alat)
+  1.0  0.0  0.0
+  0.0  1.0  0.0
+  0.0  0.0  1.0
+
+reciprocal axes: (cart. coord. in units 2 pi/alat)
+  1.0  0.0  0.0
+  0.0  1.0  0.0
+  0.0  0.0  1.0
+

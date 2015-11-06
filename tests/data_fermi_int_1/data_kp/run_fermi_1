@@ -1,0 +1,35 @@
+#!/bin/bash
+
+for kp in 8 16 24 32 40 50 60 
+do
+
+cp ../STO.$kp.a2Fsave .
+
+cat > input_tau << EOF
+&input
+  fil_a2F     = 'STO.$kp.a2Fsave'
+  fil_info    = 'info-q'
+  T           = 300         ! in K
+  alat        = 7.2926      ! in au
+  vol         = 387.8354    ! in au^3
+  cut         = 10          ! Grid reduction parameter
+  phband_i    = 21          ! initial band index
+  phband_f    = 23          ! final band index
+  efermi      = 12.029487   ! in eV (1e+20 cm-3)
+  invtau      = 0.1         ! in eV
+  lsoc        = .false.     ! Non-collinear?
+  nthreads    = 4           ! number of threads for OpenMP parallelization
+&end
+EOF
+
+./fermi_int_1.x < input_tau 
+
+mv sig_1.out sig_1.$kp.out 
+mv Se_1.out Se_1.$kp.out 
+mv Def_1.out Def_1.$kp.out 
+mv report_1 report_1.$kp
+
+rm STO.$kp.a2Fsave
+
+done
+

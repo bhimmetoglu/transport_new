@@ -1,0 +1,33 @@
+#!/bin/bash
+
+cut=10.0
+
+for kp in 40 50 #8 16 24 32 
+do
+
+for aa in 0.6 0.8 1.0 1.2 1.4 1.6
+do
+
+cat > input_tau << EOF
+&input
+  fil_a2F     = 'STO.$kp.a2Fsave'
+  fil_info    = 'info-q'
+  nk1fit      = $kp
+  nk2fit      = $kp
+  nk3fit      = $kp
+  T           = 300         ! in K
+  efermi      = 12.029487   ! in eV for n=1e+20 cm-3
+  phband_i    = 21
+  phband_f    = 23
+  aa          = $aa         ! parameter in sig_nk
+  cut         = $cut        ! parameter in reducegrid
+&end
+EOF
+
+./tauef.x < input_tau 
+
+mv invtauef.out invtauef.$kp.$aa.out
+
+done
+
+done

@@ -1,0 +1,15 @@
+&input
+  fil_a2F     = 'STO.32.a2Fsave'
+  fil_info    = 'info-q'
+  vbm         = 10.1691     ! in eV 
+  cbm         = 12.0062     ! in eV 
+  T           = 300         ! in K
+  vol         = 387.8354    ! in au^3
+  doping(1)   = 1e+18       ! in cm-3
+  doping(2)   = 1e+19       ! in cm-3
+  doping(3)   = 1e+20       ! in cm-3
+  doping(4)   = 1e+21       ! in cm-3
+  ndop        = 4           ! number of doping values      
+  nthreads    = 4           ! number of threads for OpenMP parallelization
+&end
+

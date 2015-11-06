@@ -1,0 +1,12 @@
+#!/bin/bash
+
+rm sig_vs_kp.out
+
+for kp in 8 16 24 32 40 50 60 70
+do
+
+sig=`head -1 sig.$kp.out | awk '{print $2}'`
+
+echo $kp $sig  >> sig_vs_kp.out
+
+done

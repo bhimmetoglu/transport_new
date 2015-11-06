@@ -1,0 +1,35 @@
+#!/bin/bash
+
+for cut in 4.0 8.0 10.0 12.0 16.0 20.0 
+do
+
+cp ../STO.16.a2Fsave .
+
+cat > input_tau << EOF
+&input
+  fil_a2F     = 'STO.16.a2Fsave'
+  fil_info    = 'info-q'
+  T           = 300         ! in K
+  alat        = 7.2926      ! in au
+  vol         = 387.8354    ! in au^3
+  cut         = $cut        ! Grid reduction parameter
+  phband_i    = 21          ! initial band index
+  phband_f    = 23          ! final band index
+  efermi      = 12.029487   ! in eV (1e+20 cm-3)
+  invtau      = 0.1         ! in eV
+  lsoc        = .false.     ! Non-collinear?
+  nthreads    = 4           ! number of threads for OpenMP parallelization
+&end
+EOF
+
+./fermi_int_1.x < input_tau 
+
+mv sig_1.out sig_1.$cut.out 
+mv Se_1.out Se_1.$cut.out 
+mv Def_1.out Def_1.$cut.out 
+mv report_1 report_1.$cut
+
+rm STO.16.a2Fsave
+
+done
+

@@ -1,0 +1,16 @@
+&input
+  fil_a2F     = 'STO.16.a2Fsave'
+  fil_info    = 'info-q'
+  T           = 300         ! in K
+  alat        = 7.2926      ! in au 
+  vol         = 387.8354    ! in au^3
+  efmin       = 11.20       ! in eV 
+  efmax       = 12.20       ! in eV
+  Nmu         = 50          ! sampling of Efs
+  phband_i    = 21          ! initial band index
+  phband_f    = 23          ! final band index
+  invtau      = 0.01        ! in eV           
+  lsoc        = .false.     ! Non-collinear?
+  nthreads    = 1           ! number of threads for OpenMP parallelization
+&end
+

@@ -1,0 +1,14 @@
+&input
+  fil_a2F     = 'STO.32.a2Fsave'
+  fil_info    = 'info-q'
+  alat        = 7.2926      ! in au
+  vol         = 387.8354    ! in au^3
+  T           = 300         ! in K
+  efermi      = 12.029487   ! in eV for n=1e+20 cm-3
+  phband_i    = 21
+  phband_f    = 23
+  aa          = 0.8         ! parameter in sig_nk
+  cut         = 10.0        ! parameter in reducegrid
+  lsoc        = .false.     ! Non-collinear?
+  nthreads    = 1        ! number of threads for OpenMP parallelization
+&end
