@@ -22,7 +22,7 @@ The code is parallelized using OpenMP. This means you can only use a single node
 
 makefile contains options for compilation. It is recommended to change gfortran to ifort (so fopenmp to openmp) if you have access to Intel compilers. To compile the code you want simply execute:
 
-make <name of the code> (e.g. make fermi_int)
+make name_of_the_code (e.g. make fermi_int)
 
 ## To do
 * Extensive tests for a bunch of materials..
