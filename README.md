@@ -28,9 +28,14 @@ make name_of_the_code (e.g. make fermi_int)
 A band structure calculated on a large number of k-points is necessary. One can either calculate the band structure self consistently on this large grid, or do a self-consistent calculation on a small grid and then perform a non-self-consistent field calculation for the larger grid. Below are the basic steps:
 
 <ol>
-<li> Band structure calculation on a (large) grid, and the data is saved in the prefix.a2Fsave files in QE (see the /data folder </li>
-<li> At this point, one can calculate the transprt integrals using fermi_int_0 for a range of Fermi energies. </li>
+<li> A band structure calculation on a (large) grid, with the data saved in the prefix.a2Fsave files in QE (see the data folder). </li>
+<li> At this point, one can calculate the transprt integrals using fermi_int_0 for a range of Fermi energies (see the example folder eg_fermi_int_0). </li>
+<li> If one needs to compute the Fermi integrals for a given doping value, then Fermi level for that doping level needs to be computed using ef.f90 (see the example folder eg_ef). </li>
+<li> At this point, one can either compute the Fermi integrals for constant scattering rate at a given Fermi level (fermi_int_1) or using the scattering rate resulting from electron-LO phonon interaction (fermi_int). </li>
+<li> For calculation of electron-LO phonon interaction couping constants, one can use the simple Python script vLO.py. For an example, see example folder eg_vLO. </li>
 </ol>
+
+So that's basically it! 
 
 ## To do
 * Extensive tests for a bunch of materials..
