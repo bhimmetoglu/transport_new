@@ -1,0 +1,88 @@
+#!/bin/bash
+#SBATCH -J STO
+#SBATCH -o STO.o%j
+#SBATCH -n 32
+#SBATCH -p development
+#SBATCH -t 02:00:00
+#SBATCH -A TG-DMR150099
+
+export WORK_DIR=/work/02316/burak/Complex-Oxides/STO/la2F_new
+export PSEUDO_DIR=/work/02316/burak/pseudo_psl
+export NAME=STO
+export TMP=/scratch/02316/burak/STO
+export PWSCF=~/espresso-5.0.3/bin/pw.x
+export PROJ=~/espresso-5.0.3/bin/projwfc.x
+export BANDS=~/espresso-5.0.3/bin/bands.x
+
+cp $PWSCF $TMP
+#cp $PROJ $TMP
+#cp $BANDS $TMP
+
+cd $TMP
+
+export cut=50
+
+# Bring the executable and the PP
+#
+#
+cp $PWSCF .
+cp $PSEUDO_DIR/O.pz-n-rrkjus_psl.0.1.UPF .
+cp $PSEUDO_DIR/Sr.pz-spn-rrkjus_psl.0.2.3.UPF .
+cp $PSEUDO_DIR/Ti.pz-spn-rrkjus_psl.0.2.3.UPF .
+
+
+for kp in 8 16 24 32 40 50 60 
+do
+
+cat > STO.scf.in << EOF
+&control
+   calculation   = 'scf'
+   restart_mode  = 'from_scratch'
+   prefix        = '$NAME'
+   pseudo_dir    = '.'
+   outdir        = '.'
+   verbosity     = 'high'
+/
+&system
+   ibrav         = 1
+   nat           = 5
+   celldm(1)     = 7.292601413 
+   ntyp          = 3
+   ecutwfc       = $cut
+   ecutrho       = $[12*$cut]
+   nspin         = 1
+   nbnd          = 24
+   la2F          = .true.
+/
+&electrons
+   mixing_beta      = 0.3 
+   conv_thr         = 1.0d-8
+   electron_maxstep = 200,
+/
+&ions
+/
+&cell
+  press = 0.0
+/
+ATOMIC_SPECIES
+   Sr  87.62    Sr.pz-spn-rrkjus_psl.0.2.3.UPF
+   Ti  47.867   Ti.pz-spn-rrkjus_psl.0.2.3.UPF
+   O   15.9994  O.pz-n-rrkjus_psl.0.1.UPF 
+ATOMIC_POSITIONS crystal
+   Sr    0.00  0.00  0.00
+   Ti    0.50  0.50  0.50
+   O     0.50  0.50  0.00
+   O     0.50  0.00  0.50
+   O     0.00  0.50  0.50
+K_POINTS {automatic}
+   $kp $kp $kp 0 0 0
+EOF
+
+ibrun ./pw.x -npool 8 < STO.scf.in > STO.scf.$kp.out
+
+mv STO.a2Fsave STO.$kp.a2Fsave 
+
+done
+
+cp STO.scf.*.out $WORK_DIR/
+cp *a2Fsave $WORK_DIR/

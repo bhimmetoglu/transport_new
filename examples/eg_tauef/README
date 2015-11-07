@@ -1,0 +1,6 @@
+# Usage
+./tauef.x < input_tau
+
+# Output
+invtauef.out
+Efermi, tau^{-1}_band1, tau^{-1}_band2, tau^{-1}_band3 (all in eV)

@@ -1,0 +1,16 @@
+&input
+  fil_a2F     = 'STO.16.a2Fsave'
+  fil_info    = 'info-q'
+  vbm         = 10.1691     ! in eV
+  cbm         = 12.0062     ! in eV
+  T           = 300         ! in K
+  Nen         = 500
+  emin        = 5.0         ! in eV
+  emax        = 15.0        ! in eV
+  aa          = 1.0         ! parameter in sig_nk
+  lsoc        = .false.     ! No spin-orbit
+  lfix        = .true.      ! Also compute with fixed smearing
+  degauss     = 0.2         ! Fixed smearing parameter in eV
+  nthreads    = 16          ! Number of threads
+&end
+
