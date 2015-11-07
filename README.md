@@ -7,7 +7,7 @@ There are three distinct features of the code:
 2. Adaptive smearing width choice for the evaluation of energy conserving Dirac delta functions. See documentaion.
 3. Adaptive k-grid around the Fermi level to reduce integration time. See documentation.
 
-The code is parallelized using OpenMP. This means you can only use a single node of a cluster for parallelization. Recommended setting is to use nthreads=number of cores in the node. However, you can use nthreads exceeding the nunmber of codes a little and may get some performance increase. Perform some tests before doing so (In Stampede, I have seen performance increase up to 48 threads.)
+The code is parallelized using OpenMP. This means you can only use a single node of a cluster for parallelization. Recommended setting is to use nthreads=number of cores in the node. However, you can use nthreads exceeding the number of cores and may get some performance increase. Perform some tests before doing so (In Stampede, I have seen performance increase up to 48 threads. It is probably due to the multi-threading available in the processors).
 
 ## Description of each routine in /src
 * ef.f90 : Computes Fermi levels for a given doping level in cm-3. 
