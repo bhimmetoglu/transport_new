@@ -16,8 +16,8 @@ The code is parallelized using OpenMP. This means you can only use a single node
 * tauef.f90 : This code computes the scattering rate at the Fermi level:
   tau^{-1}(E_F) = \sum_{n,k}\, tau^{-1}_{nk}\, delta( e_{nk} - E_F)
 * tauBZ_plt : Visualization code for plotting the scattering rate in the Z = 0 plane of the Brillouin Zone.
-* fermi_int_0 : Calculates transport integrals for constant scattering rate at a given Fermi energy.
-* fermi_int_1 : Calculatest ransport integrals for a constant scattering rate at a given range of Fermi levels. Useful for visualization.
+* fermi_int_1 : Calculates transport integrals for constant scattering rate at a given Fermi energy.
+* fermi_int_0 : Calculatest ransport integrals for a constant scattering rate at a given range of Fermi levels. Useful for visualization.
 * fermi_int : Calculates transport integrals for the scattering rate based on electron-phonon interaction. This is the main code. 
 
 makefile contains options for compilation. It is recommended to change gfortran to ifort (so fopenmp to openmp) if you have access to Intel compilers. To compile the code you want simply execute:
