@@ -1,5 +1,5 @@
       subroutine invtau_nk (nk1,nk2,nk3,nbnd,nksfit,nmod,etfit,         &
-                  xqfit,xk,vk,dfk,ind_k,ind_ph,eqk,al,wo,ef,T,          &
+                  xqfit,xk,vk,dfk,ind_k,ind_ph,eqk,al,wo,ef,T,at,bg,    &
                   aa, tauk )
       !
       ! Author: Burak Himmetoglu
@@ -20,6 +20,8 @@
       ! wo          : LO phonon frequencies
       ! ef          : Fermi energy
       ! T           : Temperature
+      ! at          : real space basis
+      ! bg          : reciprocal space basis
       ! aa          : Parameter for auto-smearing calculation ( 0.8 < aa < 1.4)  
       !
       ! Output is tauk
@@ -37,7 +39,7 @@
 
       double precision, intent(in) :: etfit(nbnd,nksfit), xqfit(3,nksfit),&
      &                                xk(3), al(nmod),wo(nmod), ef, T,  &
-     &                                aa,                               &
+     &                                aa, at(3,3), bg(3,3),             &
      &                                vk(nbnd,nk1*nk2*nk3,3),           &
      &                                dfk(nbnd,nk1*nk2*nk3,3)
 
@@ -61,12 +63,15 @@
       wq=1.0/nkfit
       !
       ! Compute q**2 in the Gamma centered grid (Change to invq2)
+      call cryst_to_cart(nksfit,xqfit,bg,1) ! to Cartesian coords
       q2 = 0.d0
       do iq=1,nkfit 
          do i=1,3
             q2(iq) = q2(iq) + xqfit(i,eqk(iq))**2.0
          end do
       end do
+      !
+      call cryst_to_cart(nksfit,xqfit,at,-1) ! back to crystal coords
       !
       ! Mapping between IBZ and full-grid for k+q (for a given xk)
       ! Results in eqq which is the map of the shifted grid

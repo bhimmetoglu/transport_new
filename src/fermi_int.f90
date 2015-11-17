@@ -160,7 +160,7 @@
       end if
       !
       ! Call band velocities and forward derivatives
-      call vband_ibz( nk1fit,nk2fit,nk3fit,nphband,nksfit,etfit(phband_i:phband_f,:),eqkfit,at, vk, dfk)
+      call vband_ibz( nk1fit,nk2fit,nk3fit,nphband,nksfit,etfit(phband_i:phband_f,:),eqkfit,bg, vk, dfk)
       !
       ! Include the 2pi/a factor
       vk = vk / tpi * alat
@@ -198,7 +198,7 @@
             call invtau_nk ( nk1fit,nk2fit,nk3fit,nphband,nksfit,3,     &
      &           etfit(phband_i:phband_f,:),                            &
      &           xkfit,xk,vk,dfk,ind_k,ibnd_ph,eqkfit,al,wo,efermi,T,   &
-     &           aa, invtau )
+     &           at,bg, aa, invtau )
             !
             tau = 1.0 / invtau
             !

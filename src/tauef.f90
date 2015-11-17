@@ -16,12 +16,12 @@
       integer :: i,j,k,nu,ik,ikk,nk1fit,nk2fit,nk3fit,nkfit,            &
      &           nbnd, nksfit, npk, nsym,                               &
      &           s(3,3,48),ns,nrot,ibnd,io,phband_i, phband_f,          &
-     &           nphband, n, nn, jbnd, ibnd_ph, ind_k
+     &           nphband, n, nn, jbnd, ibnd_ph, ind_k, cbm_i
       !
-      double precision :: wk, at(3,3), bg(3,3), efermi, alat,           &
+      double precision :: wk, at(3,3), bg(3,3), efermi, alat, shift,    &
      &                    T, wo(3), al(3), xk(3), invtau,aa,cut,deg
       ! 
-      logical :: lsoc
+      logical :: lsoc, lscissors
       !
       double precision, allocatable :: xkfit(:,:),etfit(:,:),wkfit(:),  &
      &                                 tauk_ef(:),dfk(:,:,:),vk(:,:,:)
@@ -46,7 +46,8 @@
                                      ! conductivity. From au to (Ohm cm)-1 
       !
       namelist /input/ fil_info, fil_a2F, cut, T, efermi, alat,         &
-     &                 aa, phband_i, phband_f, nthreads
+     &                 aa, phband_i, phband_f, nthreads, lscissors,     &
+     &                 cbm_i, shift
 
       read(5,input)
 
@@ -129,8 +130,14 @@
       ! Weights for regular grid
       wk = 2.0/nkfit
       !
+      ! If lscissors is true, then shift band energies (move conduction bands higher in energy)
+      if (lscissors) then
+        etfit(cbm_i:nbnd,:) = etfit(cbm_i:nbnd,:) + shift/RytoeV
+        !cbm = cbm + shift
+      end if
+      !
       ! Call band velocities and forward derivatives
-      call vband_ibz( nk1fit,nk2fit,nk3fit,nphband,nksfit,etfit(phband_i:phband_f,:),eqkfit,at, vk, dfk)
+      call vband_ibz( nk1fit,nk2fit,nk3fit,nphband,nksfit,etfit(phband_i:phband_f,:),eqkfit,bg, vk, dfk)
       !
       ! Include the 2pi/a factor
       vk = vk / tpi * alat
@@ -160,7 +167,7 @@
             call invtau_nk ( nk1fit,nk2fit,nk3fit,nphband,nksfit,3,     &
      &           etfit(phband_i:phband_f,:),                            &
      &           xkfit,xk,vk,dfk,ind_k,ibnd_ph,eqkfit,al,wo,efermi,T,   &
-     &           aa, invtau )
+     &           at, bg, aa, invtau )
             !
             ! Call smearing parameter at ibnd_ph and ikk 
             deg = sig0(nk1fit,nk2fit,nk3fit,dfk(ibnd_ph,ikk,:),aa)
