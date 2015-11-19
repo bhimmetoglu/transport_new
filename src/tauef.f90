@@ -16,7 +16,7 @@
       integer :: i,j,k,nu,ik,ikk,nk1fit,nk2fit,nk3fit,nkfit,            &
      &           nbnd, nksfit, npk, nsym,                               &
      &           s(3,3,48),ns,nrot,ibnd,io,phband_i, phband_f,          &
-     &           nphband, n, nn, jbnd, ibnd_ph, ind_k, cbm_i
+     &           nphband, n, nn, jbnd, ibnd_ph, ind_k, cbm_i,nmod
       !
       double precision :: wk, at(3,3), bg(3,3), efermi, alat, shift,    &
      &                    T, wo(3), al(3), xk(3), invtau,aa,cut,deg
@@ -72,7 +72,8 @@
       !
       ! LO-phonon couplings (Ryd*Ryd) 
       open(11,file='Cnu.txt',status='unknown')
-      do nu=1,3
+      read(11,*) nmod
+      do nu=1,nmod
          read(11,*) al(nu)
       end do
       close(11)
@@ -164,7 +165,7 @@
             xk(:) = xkfit(:,ind_k)   ! xk is in IBZ
             !
             !Compute inverse tau at (ibnd_ph,ind_k) 
-            call invtau_nk ( nk1fit,nk2fit,nk3fit,nphband,nksfit,3,     &
+            call invtau_nk ( nk1fit,nk2fit,nk3fit,nphband,nksfit,nmod,  &
      &           etfit(phband_i:phband_f,:),                            &
      &           xkfit,xk,vk,dfk,ind_k,ibnd_ph,eqkfit,al,wo,efermi,T,   &
      &           at, bg, aa, invtau )

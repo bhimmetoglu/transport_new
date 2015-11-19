@@ -40,13 +40,13 @@
       integer :: i,j,k,nu,ik,ikk,nk1fit,nk2fit,nk3fit,nkfit,            &
      &           nbnd, nksfit, npk, nsym,                               &
      &           s(3,3,48),ns,nrot,ibnd,io,phband_i, phband_f,          &
-     &           nphband, n, nn, jbnd, ibnd_ph, ind_k
+     &           nphband, n, nn, jbnd, ibnd_ph, ind_k, nmod, cbm_i
       !
       double precision :: wk, at(3,3), bg(3,3), efermi, alat,           &
      &                    T, wo(3), al(3), xk(3), invtau,aa,cut,deg,    &
-     &                    invT,tau,fd,dfd,fac,sig(3,3),Se(3,3),vol
+     &                    invT,tau,fd,dfd,fac,sig(3,3),Se(3,3),vol,shift
       ! 
-      logical :: lsoc
+      logical :: lsoc, lscissors
       !
       double precision, allocatable :: xkfit(:,:),etfit(:,:),wkfit(:),  &
      &                                 dfk(:,:,:),vk(:,:,:)
@@ -73,7 +73,8 @@
                                      ! conductivity. From au to (Ohm cm)-1 
       !
       namelist /input/ fil_info, fil_a2F, cut, T, efermi, alat, vol,    &
-     &                 aa, phband_i, phband_f, nthreads, lsoc
+     &                 aa, phband_i, phband_f, nthreads, lsoc,          &
+     &                 lscissors, cbm_i, shift
 
       read(5,input)
 
@@ -98,7 +99,8 @@
       !
       ! LO-phonon couplings (Ryd*Ryd) 
       open(11,file='Cnu.txt',status='unknown')
-      do nu=1,3
+      read(11,*) nmod
+      do nu=1,nmod
          read(11,*) al(nu)
       end do
       close(11)
@@ -159,6 +161,12 @@
          wk = 2.0/nkfit
       end if
       !
+      ! If lscissors is true, then shift band energies (move conduction bands higher in energy)
+      if (lscissors) then
+        etfit(cbm_i:nbnd,:) = etfit(cbm_i:nbnd,:) + shift/RytoeV
+        !cbm = cbm + shift
+      end if
+      !
       ! Call band velocities and forward derivatives
       call vband_ibz( nk1fit,nk2fit,nk3fit,nphband,nksfit,etfit(phband_i:phband_f,:),eqkfit,at, vk, dfk)
       !
@@ -195,7 +203,7 @@
             dfd = invT * fd * (1.0 - fd)
             !
             !Compute inverse tau at (ibnd_ph,ind_k) 
-            call invtau_nk ( nk1fit,nk2fit,nk3fit,nphband,nksfit,3,     &
+            call invtau_nk ( nk1fit,nk2fit,nk3fit,nphband,nksfit,nmod,  &
      &           etfit(phband_i:phband_f,:),                            &
      &           xkfit,xk,vk,dfk,ind_k,ibnd_ph,eqkfit,al,wo,efermi,T,   &
      &           at,bg, aa, invtau )

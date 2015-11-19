@@ -11,15 +11,16 @@ def main():
   f.close()
 
   # Assign input variables
-  
 
-  a0 = float(f_inp[0].split()[1])   # lattice constant in au 
-  eps = float(f_inp[1].split()[1])  # eps_infty
+  nmod = int(f_inp[0].split()[1]) # Number of split up LO/TO modes 
+  a0 = float(f_inp[1].split()[1])   # lattice constant in au 
+  eps = float(f_inp[2].split()[1])  # eps_infty
+
+  nmod=3
 
   # LO and TO modes
-  LO = np.array([float(f_inp[2].split()[i]) for i in range(1,4,1)])
-  TO = np.array([float(f_inp[3].split()[i]) for i in range(1,4,1)])
-
+  LO = np.array([float(f_inp[3].split()[i]) for i in range(1,nmod+1,1)])
+  TO = np.array([float(f_inp[4].split()[i]) for i in range(1,nmod+1,1)])
 
   # Physical constants
   RytoeV = 13.60569253 # Ryd = 13.60569253 eV
@@ -34,12 +35,12 @@ def main():
   pre = eV / ( 2*tpi**2 * eps0 * au ) / RytoeV # This is in Ryd
   pre = pre / eps / a0
    
-  Cnu = np.zeros(3)
+  Cnu = np.zeros(nmod)
   # Compute el-ph constants for each polar LO mode
-  for nu in range(3):
-    num = np.prod(np.ones(3) - TO**2 / LO[nu]**2)
+  for nu in range(nmod):
+    num = np.prod(np.ones(nmod) - TO**2 / LO[nu]**2)
     den = 1.0
-    for j in range(3):
+    for j in range(nmod):
       if j != nu:
         den = den * (1.0 - LO[j]**2/LO[nu]**2)
     
