@@ -88,15 +88,6 @@
       T = T * KtoRy
       efermi = efermi / RytoeV
       ! 
-      ! Read the POP frequencies in cm-1 (just Gamma should be)
-      !
-      open(11,file='wo.in',status='unknown')
-          read(11,*) (wo(i),i=1,3)
-      close(11)
-      !
-      ! Convert to Ryd
-      wo = wo / Rytocm1
-      !
       ! LO-phonon couplings (Ryd*Ryd) 
       open(11,file='Cnu.txt',status='unknown')
       read(11,*) nmod
@@ -104,6 +95,15 @@
          read(11,*) al(nu)
       end do
       close(11)
+      !
+      ! Read the POP frequencies in cm-1 (just Gamma should be)
+      !
+      open(11,file='wo.in',status='unknown')
+          read(11,*) (wo(i),i=1,nmod)
+      close(11)
+      !
+      ! Convert to Ryd
+      wo = wo / Rytocm1
       !
       ! Total number of bands of interest (usually the number of relevant conduction bands)
       nphband = phband_f - phband_i + 1
