@@ -43,7 +43,7 @@
      &           nphband, n, nn, jbnd, ibnd_ph, ind_k, nmod, cbm_i
       !
       double precision :: wk, at(3,3), bg(3,3), efermi, alat,           &
-     &                    T, wo(50), al(3), xk(3), invtau,aa,cut,deg,   &
+     &                    T, wo(50), al(50), xk(3), invtau,aa,cut,deg,  &
      &                    invT,tau,fd,dfd,fac,sig(3,3),Se(3,3),vol,shift
       ! 
       logical :: lsoc, lscissors
@@ -184,13 +184,13 @@
       ! Main do-loop, parallelized
       !$ t0 = omp_get_wtime()
       !
-      !$omp parallel default(shared) &
-      !$omp private(ik,ikk,ind_k,xk,fac,fd,dfd,invtau,tau,i,j,ibnd,ibnd_ph) 
       do ibnd=phband_i,phband_f 
          !
          ibnd_ph = ibnd - phband_i + 1
          ! 
-         !$omp do reduction(+: I0, I1, I2)
+         !$omp parallel do default(shared) &
+         !$omp private (ik,ikk,ind_k,xk,fac,fd,dfd,invtau,tau,i,j) & 
+         !$omp reduction(+: I0, I1, I2)
          do ik=1,nkeff(ibnd_ph)
             !
             ikk = iflag(ibnd_ph,ik)  ! ikk is in full-grid (just reduced)
@@ -224,10 +224,9 @@
             end do ! i
             !
          end do ! ik
-         !$omp end do
+         !$omp end parallel do
          !
       end do ! ibnd
-      !$omp end parallel
       !
       !Total integration time
       !$ t0 = omp_get_wtime() - t0
