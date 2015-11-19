@@ -16,8 +16,6 @@ def main():
   a0 = float(f_inp[1].split()[1])   # lattice constant in au 
   eps = float(f_inp[2].split()[1])  # eps_infty
 
-  nmod=3
-
   # LO and TO modes
   LO = np.array([float(f_inp[3].split()[i]) for i in range(1,nmod+1,1)])
   TO = np.array([float(f_inp[4].split()[i]) for i in range(1,nmod+1,1)])
