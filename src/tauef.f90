@@ -19,7 +19,7 @@
      &           nphband, n, nn, jbnd, ibnd_ph, ind_k, cbm_i,nmod
       !
       double precision :: wk, at(3,3), bg(3,3), efermi, alat, shift,    &
-     &                    T, wo(3), al(3), xk(3), invtau,aa,cut,deg
+     &                    T, wo(50), al(3), xk(3), invtau,aa,cut,deg
       ! 
       logical :: lsoc, lscissors
       !
