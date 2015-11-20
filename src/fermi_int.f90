@@ -30,6 +30,9 @@
       !                      Larger aa will lead to smoother DOS. Needs to be tested for various grids.
       ! lsoc               : if .true. then the band structure is non-collinear
       ! nthreads           : Number of threads for OpenMP parallelization
+      ! lscissors          : if .true. conduction bands are shifted by a constant energy up
+      ! shift              : value of the shift applied to conduction bands
+      ! cbm_i              : the initial conduction band for which the shift is applied ( all bands with index >= cbm_i are shifted up)
 
 !$    USE omp_lib        
 
@@ -265,7 +268,7 @@
          write(11,"(A,e14.6)") "Integration time(s) =", tf-ts
       end if
       !
-      write(11,"(A,I5)") "Number of kpoints (regular grid) = ", nkfit
+      write(11,"(A,I8)") "Number of kpoints (regular grid) = ", nkfit
       do ibnd=1,nphband
          write(11,"(A,2I5)") "band, reduced grid size", ibnd, nkeff(ibnd) 
       end do

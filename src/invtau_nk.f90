@@ -89,7 +89,7 @@
       dfkk(:) = dfk(ind_ph,ind_k,:)
       norm_vk = abs(vkk(1)**2+vkk(2)**2+vkk(3)**2) 
       !
-      ! Launch threads here instead
+      !Launch threads here, instead of inside fermi_int or tauef 
       !$omp parallel do default(shared) &
       !$omp collapse(2) &
       !$omp private(iq,jbnd,ekq,nu,be,temp1,temp2,deg,w0g1,w0g2,vfac,norm_vkq) &
