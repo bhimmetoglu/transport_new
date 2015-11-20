@@ -148,16 +148,12 @@
      &                cut,T, nkeff,iflag)
       ! 
       tauk_ef = 0.d0
-      ! Main do-loop, parallelized
       !$ t0 = omp_get_wtime()
       !
-      !$omp parallel default(shared) &
-      !$omp private(ik,ikk,ind_k,xk,invtau,deg,ibnd,ibnd_ph) 
       do ibnd=phband_i,phband_f 
          !
          ibnd_ph = ibnd - phband_i + 1
          ! 
-         !$omp do reduction(+: tauk_ef)
          do ik=1,nkeff(ibnd_ph)
             !
             ikk = iflag(ibnd_ph,ik)  ! ikk is in full-grid (just reduced)
@@ -178,10 +174,8 @@
      &                    w0gauss((efermi-etfit(ibnd,ind_k))/deg)/deg
             !
          end do ! ik
-         !$omp end do
          !
       end do ! ibnd
-      !$omp end parallel
       !
       !Total integration time
       !$ t0 = omp_get_wtime() - t0

@@ -89,6 +89,11 @@
       dfkk(:) = dfk(ind_ph,ind_k,:)
       norm_vk = abs(vkk(1)**2+vkk(2)**2+vkk(3)**2) 
       !
+      ! Launch threads here instead
+      !$omp parallel do default(shared) &
+      !$omp collapse(2) &
+      !$omp private(iq,jbnd,ekq,nu,be,temp1,temp2,deg,w0g1,w0g2,vfac,norm_vkq) &
+      !$omp reduction(+:tauk)
       do iq=2,nkfit ! Avoid q=0 divergence
          !
          do jbnd=1,nbnd
@@ -142,5 +147,6 @@
          end do ! jbnd
          !
       end do ! iq
+      !$omp end parallel do
 
       end subroutine invtau_nk

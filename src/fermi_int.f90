@@ -188,9 +188,6 @@
          !
          ibnd_ph = ibnd - phband_i + 1
          ! 
-         !$omp parallel do default(shared) &
-         !$omp private (ik,ikk,ind_k,xk,fac,fd,dfd,invtau,tau,i,j) & 
-         !$omp reduction(+: I0, I1, I2)
          do ik=1,nkeff(ibnd_ph)
             !
             ikk = iflag(ibnd_ph,ik)  ! ikk is in full-grid (just reduced)
@@ -209,7 +206,7 @@
      &           at,bg, aa, invtau )
             !
             tau = 1.0 / invtau
-            !
+            ! 
             ! Compute I0 (related to Thomas-Fermi Screening)
             I0 = I0 + wk * dfd 
             !
@@ -224,7 +221,6 @@
             end do ! i
             !
          end do ! ik
-         !$omp end parallel do
          !
       end do ! ibnd
       !
