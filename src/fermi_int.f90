@@ -77,7 +77,7 @@
       !
       namelist /input/ fil_info, fil_a2F, cut, T, efermi, alat, vol,    &
      &                 aa, phband_i, phband_f, nthreads, lsoc,          &
-     &                 lscissors, cbm_i, shift
+     &                 lscissors, cbm_i, shift, nmod
 
       read(5,input)
 
