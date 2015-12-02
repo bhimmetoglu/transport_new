@@ -23,4 +23,4 @@ fermi_int_1: fermi_int_1.f90
 	${F90} ${FFLAGS} cryst_to_car.f90 reducegrid.f90 lint.f90 vband_ibz.f90 fermi_int_1.f90 -o fermi_int_1.x
 
 fermi_int: fermi_int.f90
-	${F90} ${FFLAGS} smearing_mod.f90 cryst_to_car.f90 reducegrid.f90 lint.f90 vband_ibz.f90 vband_kq.f90 kplusq.f90 invtau_nk.f90 fermi_int.f90 -o fermi_int.x
+	${F90} ${FFLAGS} smearing_mod.f90 cryst_to_car.f90 reducegrid.f90 lint.f90 vband_ibz.f90 vband_kq.f90 kplusq.f90 invtau_nk.f90 invtau_nk_Z.f90 fermi_int.f90 -o fermi_int.x

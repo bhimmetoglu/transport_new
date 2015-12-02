@@ -33,6 +33,7 @@
       ! lscissors          : if .true. conduction bands are shifted by a constant energy up
       ! shift              : value of the shift applied to conduction bands
       ! cbm_i              : the initial conduction band for which the shift is applied ( all bands with index >= cbm_i are shifted up)
+      ! lgfromZ            : True if el-ph is computed from Z* (Born effective charges)
 
 !$    USE omp_lib        
 
@@ -49,10 +50,11 @@
      &                    T, wo(50), al(50), xk(3), invtau,aa,cut,deg,  &
      &                    invT,tau,fd,dfd,fac,sig(3,3),Se(3,3),vol,shift
       ! 
-      logical :: lsoc, lscissors
+      logical :: lsoc, lscissors, lgfromZ
       !
       double precision, allocatable :: xkfit(:,:),etfit(:,:),wkfit(:),  &
-     &                                 dfk(:,:,:),vk(:,:,:)
+     &                                 dfk(:,:,:),vk(:,:,:),            &
+     &                                 wo_ibz(:,:), g2(:,:)
       !
       double precision :: I0, I1(3,3), I2(3,3), inv_I1(3,3) ! Fermi integrals
       !
@@ -77,7 +79,7 @@
       !
       namelist /input/ fil_info, fil_a2F, cut, T, efermi, alat, vol,    &
      &                 aa, phband_i, phband_f, nthreads, lsoc,          &
-     &                 lscissors, cbm_i, shift, nmod
+     &                 lscissors, cbm_i, shift, lgfromZ, nmod
 
       read(5,input)
 
@@ -91,23 +93,6 @@
       T = T * KtoRy
       efermi = efermi / RytoeV
       ! 
-      ! LO-phonon couplings (Ryd*Ryd) 
-      open(11,file='Cnu.txt',status='unknown')
-      read(11,*) nmod
-      do nu=1,nmod
-         read(11,*) al(nu)
-      end do
-      close(11)
-      !
-      ! Read the POP frequencies in cm-1 (just Gamma should be)
-      !
-      open(11,file='wo.in',status='unknown')
-          read(11,*) (wo(i),i=1,nmod)
-      close(11)
-      !
-      ! Convert to Ryd
-      wo = wo / Rytocm1
-      !
       ! Total number of bands of interest (usually the number of relevant conduction bands)
       nphband = phband_f - phband_i + 1
       !
@@ -164,6 +149,43 @@
          wk = 2.0/nkfit
       end if
       !
+      !
+      if ( lgfromZ ) then
+         !
+         ! Allocate frequencies and g2 in the full grid
+         allocate(wo_ibz(nksfit,nmod), g2(nksfit,nmod)) 
+         !
+         open(11,file='freq.out',status='unknown')
+         open(12,file='g2.out',status='unknown')
+         !
+         do ik=1,nksfit
+            read(11,*) (wo_ibz(ik,nu),nu=1,nmod)
+            read(12,*) (g2(ik,nu),nu=1,nmod)
+         end do
+         close(11)
+         close(12)
+         !
+         ! Convert to Ryd
+         wo_ibz = wo_ibz / Rytocm1 
+         !
+      else
+         ! LO-phonon couplings (Ryd*Ryd) 
+         open(11,file='Cnu.txt',status='unknown')
+         do nu=1,nmod
+            read(11,*) al(nu)
+         end do
+         close(11)
+         !
+         ! Read the POP frequencies in cm-1 (just Gamma should be OK)
+         !
+         open(11,file='wo.in',status='unknown')
+             read(11,*) (wo(i),i=1,nmod)
+         close(11)
+         !
+         ! Convert to Ryd
+         wo = wo / Rytocm1
+      end if
+      !
       ! If lscissors is true, then shift band energies (move conduction bands higher in energy)
       if (lscissors) then
         etfit(cbm_i:nbnd,:) = etfit(cbm_i:nbnd,:) + shift/RytoeV
@@ -203,10 +225,20 @@
             dfd = invT * fd * (1.0 - fd)
             !
             !Compute inverse tau at (ibnd_ph,ind_k) 
-            call invtau_nk ( nk1fit,nk2fit,nk3fit,nphband,nksfit,nmod,  &
-     &           etfit(phband_i:phband_f,:),                            &
-     &           xkfit,xk,vk,dfk,ind_k,ibnd_ph,eqkfit,al,wo,efermi,T,   &
-     &           at,bg, aa, invtau )
+            !
+            if ( lgfromZ ) then
+               call invtau_nk_Z ( nk1fit,nk2fit,nk3fit,nphband,nksfit,  &
+     &              nmod,etfit(phband_i:phband_f,:),xk,vk,dfk,          &
+     &              ind_k,ibnd_ph,eqkfit,g2,wo_ibz,efermi,T,at,bg,aa,   &
+     &              invtau )          
+               !
+            else 
+               call invtau_nk ( nk1fit,nk2fit,nk3fit,nphband,nksfit,    &
+     &              nmod,etfit(phband_i:phband_f,:),xkfit,xk,vk,dfk,    &
+     &              ind_k,ibnd_ph,eqkfit,al,wo,efermi,T,at,bg,aa,       &
+     &              invtau )
+               !
+            end if
             !
             tau = 1.0 / invtau
             ! 
@@ -276,6 +308,8 @@
       !
       ! Free memory
       deallocate(xkfit,etfit,eqkfit,dfk,vk,nkeff,iflag)
+      !
+      if (lgfromZ) deallocate(wo_ibz,g2)
 
       contains
          !
