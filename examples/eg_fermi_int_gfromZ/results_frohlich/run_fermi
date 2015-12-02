@@ -1,0 +1,47 @@
+#!/bin/bash
+
+if [ ! -d $results ]; then
+   mkdir  $results
+fi
+
+export kp=50
+
+for ind in 1 2 3 4
+do
+
+dop=`head -$ind dop_vs_ef | tail -1 | awk '{print $1}'`
+ef=`head -$ind dop_vs_ef | tail -1 | awk '{print $2}'`
+
+cat > input << EOF
+&input
+  fil_a2F     = 'GaAs.$kp.a2Fsave'
+  fil_info    = 'info-q'
+  T           = 300         ! in K
+  alat        = 10.6867     ! in au
+  vol         = 305.1201    ! in au^3
+  efermi      = $ef         ! in eV
+  phband_i    = 10          ! initial band index
+  phband_f    = 14          ! final band index
+  lsoc        = .false.     ! Non-collinear?
+  aa          = 1.0         ! Adaptive smearing parameter
+  cut         = 10.0        ! Grid reduction parameter 
+  nthreads    = 48          ! number of threads for OpenMP parallelization
+  cbm_i       = 10          ! First conduction band to be shifted
+  shift       = 0.8839      ! Shift conduction bands by this much (in eV)
+  lscissors   = .true.      ! Apply scissors op.
+  lgfromZ     = .false.     ! Calculate using Frohlich
+  nmod        = 1           ! 1 LO mode
+&end
+EOF
+
+./fermi_int.x < input 
+
+mv Def.out ./results/Def.$dop.out
+mv sig.out ./results/sig.$dop.out
+mv Se.out ./results/Se.$dop.out
+mv report ./results/report.$dop
+
+done
+
+rm GaAs.50.a2Fsave 
+

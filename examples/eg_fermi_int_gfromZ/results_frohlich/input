@@ -1,0 +1,17 @@
+&input
+  fil_a2F     = 'GaAs.50.a2Fsave'
+  fil_info    = 'info-q'
+  T           = 300         ! in K
+  alat        = 10.6867     ! in au
+  vol         = 305.1201    ! in au^3
+  efermi      = 9.893541
+  phband_i    = 10          ! initial band index
+  phband_f    = 14          ! final band index
+  lsoc        = .false.     ! Non-collinear?
+  aa          = 1.0
+  cut         = 10.0
+  nthreads    = 48          ! number of threads for OpenMP parallelization
+  cbm_i       = 10
+  shift       = 0.8839
+  lscissors   = .true.
+&end

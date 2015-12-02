@@ -1,0 +1,41 @@
+#!/bin/bash
+
+export kp=50
+
+for ind in 1 2 3 4
+do
+
+dop=`head -$ind dop_vs_ef | tail -1 | awk '{print $1}'`
+ef=`head -$ind dop_vs_ef | tail -1 | awk '{print $2}'`
+
+cat > input << EOF
+&input
+  fil_a2F     = 'GaAs.$kp.a2Fsave'
+  fil_info    = 'info-q'
+  T           = 300         ! in K
+  alat        = 10.6867     ! in au
+  vol         = 305.1201    ! in au^3
+  efermi      = $ef         ! Fermi energy in eV  
+  phband_i    = 10          ! initial band index
+  phband_f    = 12          ! final band index
+  lsoc        = .false.     ! Non-collinear?
+  aa          = 1.0         ! For adaptive smearing of delta functions
+  cut         = 10.0        ! Parameter for grid reduction (test before using) 
+  nthreads    = 48          ! number of threads for OpenMP parallelization
+  cbm_i       = 10          ! Index of first conduction band to be shifted
+  shift       = 0.8839      ! Amount of shift in eV
+  lscissors   = .true.      ! Apply scissors
+  lgfromZ     = .true.      ! Use Z* for computing el-ph
+  nmod        = 6           ! Number of modes (=3*nat)
+&end
+EOF
+
+./fermi_int.x < input 
+
+mv Def.out Def.$dop.out
+mv sig.out sig.$dop.out
+mv Se.out Se.$dop.out
+mv report report.$dop
+
+done
+

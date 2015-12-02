@@ -1,0 +1,5 @@
+# Example transport calculation using el-ph based on Z*
+# Results from 32x32x32 and 50x50x50 grids are provided.
+# The example contains calculations for GaAs.
+# For comparison, a calculation based on Frohlich model
+# is also provided. 

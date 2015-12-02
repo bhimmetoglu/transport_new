@@ -1,0 +1,21 @@
+#!/bin/bash
+
+cat > q2r.in << EOF
+&input
+  fildyn='GaAs.dyn',
+  flfrc='GaAs.444.fc'
+  zasr='crystal'
+ /
+EOF
+
+./q2r.x < q2r.in > q2r.out
+
+cat > GaAs.matdyn.in << EOF
+&input
+    asr='crystal',
+    flfrc='GaAs.444.fc' 
+ /
+EOF
+cat path_cart.out >> GaAs.matdyn.in
+ 
+./matdyn.x < GaAs.matdyn.in > GaAs.matdyn.out
