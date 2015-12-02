@@ -29,7 +29,7 @@ A band structure calculated on a large number of k-points is necessary. One can 
 
 <ol>
 <li> A band structure calculation on a (large) grid, with the data saved in the prefix.a2Fsave files in QE (see the data folder). </li>
-<li> At this point, one can calculate the transprt integrals using fermi_int_0 for a range of Fermi energies (see the example folder eg_fermi_int_0). </li>
+<li> At this point, one can calculate the transprot integrals using fermi_int_0 for a range of Fermi energies (see the example folder eg_fermi_int_0). </li>
 <li> If one needs to compute the Fermi integrals for a given doping value, then Fermi level for that doping level needs to be computed using ef.f90 (see the example folder eg_ef). </li>
 <li> At this point, one can either compute the Fermi integrals for constant scattering rate at a given Fermi level (fermi_int_1) or using the scattering rate resulting from electron-LO phonon interaction (fermi_int). </li>
 <li> For calculation of electron-LO phonon interaction couping constants, one can use the simple Python script vLO.py. For an example, see example folder eg_vLO. </li>
