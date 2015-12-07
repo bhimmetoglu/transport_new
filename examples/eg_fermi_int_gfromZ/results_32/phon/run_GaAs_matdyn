@@ -1,14 +1,37 @@
 #!/bin/bash
+#SBATCH -J GaAs
+#SBATCH -o GaAs.o%j
+#SBATCH -n 1
+#SBATCH -p development
+#SBATCH -t 00:30:00
+#SBATCH -A TG-DMR150099 
 
-cat > q2r.in << EOF
-&input
-  fildyn='GaAs.dyn',
-  flfrc='GaAs.444.fc'
-  zasr='crystal'
- /
-EOF
+export WORK_DIR=/work/02316/burak/GaAs/phon_paw/full_32x32x32
+export PSEUDO_DIR=/work/02316/burak/pseudo_paw
+export NAME=GaAs
+export TMP=/scratch/02316/burak/GaAs_ph
+export PWSCF=~/espresso-5.1.2/bin/pw.x
+export BANDS=~/espresso-5.1.2/bin/bands.x
+export PHON=~/espresso-5.1.2/bin/ph.x
+export Q2R=~/espresso-5.1.2/bin/q2r.x
+export DYN=~/espresso-5.1.2/bin/matdyn.x
 
-./q2r.x < q2r.in > q2r.out
+#cp $Q2R $WORK_DIR
+cp $DYN $WORK_DIR
+#cp $WORK_DIR/*dyn $TMP
+#cp $WORK_DIR/path_q.out $TMP
+
+cd $WORK_DIR
+
+#cat > q2r.in << EOF
+#&input
+#  fildyn='GaAs.dyn',
+#  flfrc='GaAs.444.fc'
+#  zasr='crystal'
+# /
+#EOF
+#
+#ibrun ./q2r.x < q2r.in > q2r.out
 
 cat > GaAs.matdyn.in << EOF
 &input
@@ -18,4 +41,8 @@ cat > GaAs.matdyn.in << EOF
 EOF
 cat path_cart.out >> GaAs.matdyn.in
  
-./matdyn.x < GaAs.matdyn.in > GaAs.matdyn.out
+ibrun ./matdyn.x < GaAs.matdyn.in > GaAs.matdyn.out
+
+#cp *out $WORK_DIR
+#cp GaAs.444.fc $WORK_DIR
+#cp matdyn* $WORK_DIR
