@@ -229,7 +229,7 @@ def el_ph(om,eig,q,zs,mass,epsinv,nmodes,nqpt,nat):
   g = np.zeros((nqpt,nmodes),dtype=complex)
 
   # 1/q^2
-  q2 = np.sum(q[:,1:4]**2,axis=1)
+  q2 = np.sum(q[:,0:3]**2,axis=1)
   inv_q2 = 1.0 / (q2+1e-10)
 
   for imod in range(nmodes):
