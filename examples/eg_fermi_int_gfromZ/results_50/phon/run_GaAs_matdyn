@@ -1,45 +1,30 @@
 #!/bin/bash
-#SBATCH -J GaAs
-#SBATCH -o GaAs.o%j
-#SBATCH -n 1
-#SBATCH -p development
-#SBATCH -t 01:30:00
-#SBATCH -A TG-DMR150099 
-
-export WORK_DIR=/work/02316/burak/GaAs/phon_paw/full_50x50x50
-export PSEUDO_DIR=/work/02316/burak/pseudo_paw
-export NAME=GaAs
-export TMP=/scratch/02316/burak/GaAs_ph
 export PWSCF=~/espresso-5.1.2/bin/pw.x
 export BANDS=~/espresso-5.1.2/bin/bands.x
 export PHON=~/espresso-5.1.2/bin/ph.x
 export Q2R=~/espresso-5.1.2/bin/q2r.x
 export DYN=~/espresso-5.1.2/bin/matdyn.x
 
-#cp $Q2R $WORK_DIR
+cp $Q2R $WORK_DIR
 cp $DYN $WORK_DIR
-#cp $WORK_DIR/*dyn $TMP
-#cp $WORK_DIR/path_q.out $TMP
 
-cd $WORK_DIR
+cat > q2r.in << EOF
+&input
+  fildyn='GaAs.dyn',
+  flfrc='GaAs.888.fc'
+  zasr='crystal'
+ /
+EOF
 
-#cat > q2r.in << EOF
-#&input
-#  fildyn='GaAs.dyn',
-#  flfrc='GaAs.444.fc'
-#  zasr='crystal'
-# /
-#EOF
-#
-#ibrun ./q2r.x < q2r.in > q2r.out
+./q2r.x < q2r.in > q2r.out
 
 cat > GaAs.matdyn.in << EOF
 &input
     asr='crystal',
-    flfrc='GaAs.444.fc' 
+    flfrc='GaAs.888.fc' 
  /
 EOF
 cat path_cart.out >> GaAs.matdyn.in
  
-ibrun ./matdyn.x < GaAs.matdyn.in > GaAs.matdyn.out
+./matdyn.x < GaAs.matdyn.in > GaAs.matdyn.out
 
