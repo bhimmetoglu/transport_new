@@ -24,6 +24,10 @@ makefile contains options for compilation. It is recommended to change gfortran 
 
 make name_of_the_code (e.g. make fermi_int)
 
+## Description of some scripts /src
+qpt_gen.py and gdiel.py are used for generating electron-phonon couplings along a given q-point grid for the formula based on Z* (Born effective charges). The main transport code can use the option lgfromZ = TRUE to use the output from these scripts.
+
+
 ## How to use the code
 A band structure calculated on a large number of k-points is necessary. One can either calculate the band structure self consistently on this large grid, or do a self-consistent calculation on a small grid and then perform a non-self-consistent field calculation for the larger grid. Below are the basic steps:
 
